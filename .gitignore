@@ -1,0 +1,64 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+ENV/
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Jupyter
+.ipynb_checkpoints
+*.ipynb_checkpoints/
+
+# Data files
+data/*.csv
+data/*.txt
+!data/README.md
+
+# Model checkpoints
+models/*.pth
+models/*.pt
+!models/README.md
+
+# Tokenizers
+tokenizers/*.json
+!tokenizers/README.md
+
+# Kaggle
+.kaggle/
+kaggle.json
+
+# Hugging Face
+.huggingface/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Large files
+TinyStoriesV2-GPT4-train.txt
+TinyStoriesV2-GPT4-valid.txt

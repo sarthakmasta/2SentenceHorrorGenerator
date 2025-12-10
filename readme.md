@@ -39,9 +39,11 @@ Story:  The neighborhood kids dared me to enter the abandoned house. When I step
 - `TSH_Transformer_main.ipynb` - Original 15M parameter model
 - `TSH_Transformer_biggermodel.ipynb` - Scaled 43M parameter model
 
+The subsequent readme pertains to the older model but almost all of it is applicable for the bigger model as well. The only changes are listed above!
+
 ---
 
-## Demo
+## Demo (smaller model)
 
 ### Example Generations
 <img src="images/example1.png" alt="Example Generation 1" width="1000" />
@@ -70,7 +72,7 @@ Generate grammatically correct two-sentence horror stories that:
 
 **Challenge:** Training language models from scratch typically requires massive datasets and compute. Small domain-specific datasets often lead to poor grammar, repetitive outputs, or nonsensical text.
 
-## Model Architecture
+## Model Architecture (smaller model)
 
 Custom GPT-style decoder-only transformer built from scratch in PyTorch:
 
@@ -93,7 +95,7 @@ Custom GPT-style decoder-only transformer built from scratch in PyTorch:
 - Layer normalization before attention/FFN (pre-norm stabilizes training)
 - Relatively small model size (enables training from scratch in ~1 hour)
 
-## Training Strategy
+## Training Strategy (smaller model)
 
 ### Phase 1: Pretraining on TinyStories
 
@@ -126,7 +128,7 @@ https://huggingface.co/datasets/sarthakmasta/TwoSentenceHorrorSynthetic
 - **Outcome:** Preserves grammar while learning horror patterns
 - **Note:** The validation loss for fine tuning goes up drastically because the validation is done on a small subset of the fine-tuning horror dataset, and not because the model has forgotten the pretraining.
 
-### Training and Validation Loss Curves
+### Training and Validation Loss Curves (smaller model)
 <img src="images/losscurve.png" alt="Training and Validation Loss" width="800" />
 
 ## Tokenization
@@ -182,7 +184,7 @@ I didn't plan on using TinyStories initially, just used this to train.
 
 
 
-## Unfiltered Actual Sample generations:
+## Unfiltered Actual Sample generations: (smaller model)
 - Prompt: 'I tucked my son into bed.'   
 Story:  I tucked my son into bed. As I turned off the light, he whispered, "Mommy, there's someone under my bed."   
 
@@ -226,7 +228,7 @@ Get your token at: https://huggingface.co/settings/tokens
 
 ### Running Training
 
-1. Open `two_sentence_horror.ipynb` in Google Colab
+1. Open `TSH_Transformer_main.ipynb` in Google Colab
 2. Enable GPU: Runtime -> Change runtime type -> A100
 3. Run cells sequentially
 4. Training takes ~45 minutes on A100
@@ -263,7 +265,6 @@ After training completes, run the proceeding cells to:
 
 ## Future Improvements
 
-- Implement a slightly bigger model with bigger subset of TinyStories in pretraining to get a more creative model
 - Add confidence scores to generation (perplexity-based)
 - Increase the amount of data used for fine-tuning (Generating 50k more samples)
 - Fine-tune on other creative writing domains (sci-fi microfiction, romance flash fiction)

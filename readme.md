@@ -2,6 +2,45 @@
 
 A GPT-style decoder-only transformer built and trained from scratch to generate creepy two-sentence horror stories using a two-phase training approach: pretraining on clean narratives, then fine-tuning on synthetic horror data.
 
+## NOTE
+
+This model was scaled up for improved performance:
+**Updated architecture:**
+- Parameters: From 15.3M to **43M** (2.8× larger)
+- Multi-Head Self-Attention (8 heads, 64 dim per head)
+- Feed-Forward Network (512 -> 2048 -> 512)
+- Dropout: 0.20 (To prevent overfitting with larger model)
+- Weight decay during fine-tuning: 0.1
+
+**Training results (scaled model):**
+- Pretrain validation loss: 1.66 → **1.41** (15% improvement)
+- Fine-tune validation loss: 2.33 → **1.99** (14.6% improvement)
+
+<img src="images/biggermodellosscurve.png" alt="Improved Training Curve" width="1000" />
+<br><br>
+
+**Impact on generation quality:** This improvement in loss shows in the examples with more coherent sentence structures and less nonsensical generations. Here are the examples for the same prompts with the bigger model:
+- Prompt: 'I tucked my son into bed.'
+Story:  I tucked my son into bed. As he turned off the light, he whispered, "Mommy, there's someone under my bed."
+
+- Prompt: 'The doctor gave me the test results.'
+Story:  The doctor gave me the test results. I was horrified to see the blood-red teeth on my hands, and it wasn’t mine anymore.
+
+- Prompt: 'I heard my wife laughing in the kitchen.'
+Story:  I heard my wife laughing in the kitchen. When she asked me why she was so happy, her voice replied from the kitchen.
+
+- Prompt: 'My daughter won't stop staring at the corner.'
+Story:  My daughter won't stop staring at the corner. I felt a chill when I saw her standing there, smiling wider than before.
+
+- Prompt: [Random]
+Story:  The neighborhood kids dared me to enter the abandoned house. When I stepped inside, they were all staring at me with hollow eyes
+
+**Both model versions are available:**
+- `TSH_Transformer_main.ipynb` - Original 15M parameter model
+- `TSH_Transformer_biggermodel.ipynb` - Scaled 43M parameter model
+
+---
+
 ## Demo
 
 ### Example Generations
@@ -36,11 +75,11 @@ Generate grammatically correct two-sentence horror stories that:
 Custom GPT-style decoder-only transformer built from scratch in PyTorch:
 
 **Core Components:**
-- **Token Embedding:** ~17.4K vocab → 256 dimensions
+- **Token Embedding:** ~17.4K vocab -> 256 dimensions
 - **Positional Embedding:** Learned positions up to 256 tokens
 - **8 Transformer Blocks**, each containing:
   - Multi-Head Self-Attention (8 heads, 32 dim per head)
-  - Feed-Forward Network (256 → 1024 → 256)
+  - Feed-Forward Network (256 -> 1024 -> 256)
   - Layer Normalization
   - Residual connections
   - Dropout (0.15)

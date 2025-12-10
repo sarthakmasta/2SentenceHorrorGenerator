@@ -2,7 +2,48 @@
 
 A GPT-style decoder-only transformer built and trained from scratch to generate creepy two-sentence horror stories using a two-phase training approach: pretraining on clean narratives, then fine-tuning on synthetic horror data.
 
-## Demo
+## NOTE
+
+This model was scaled up for improved performance:
+**Updated architecture:**
+- Parameters: From 15.3M to **43M** (2.8× larger)
+- Multi-Head Self-Attention (8 heads, 64 dim per head)
+- Feed-Forward Network (512 -> 2048 -> 512)
+- Dropout: 0.20 (To prevent overfitting with larger model)
+- Weight decay during fine-tuning: 0.1
+
+**Training results (scaled model):**
+- Pretrain validation loss: 1.66 → **1.41** (15% improvement)
+- Fine-tune validation loss: 2.33 → **1.99** (14.6% improvement)
+
+<img src="images/biggermodellosscurve.png" alt="Improved Training Curve" width="1000" />
+<br><br>
+
+**Impact on generation quality:** This improvement in loss shows in the examples with more coherent sentence structures and less nonsensical generations. Here are the examples for the same prompts with the bigger model:
+- Prompt: 'I tucked my son into bed.'
+Story:  I tucked my son into bed. As he turned off the light, he whispered, "Mommy, there's someone under my bed."
+
+- Prompt: 'The doctor gave me the test results.'
+Story:  The doctor gave me the test results. I was horrified to see the blood-red teeth on my hands, and it wasn’t mine anymore.
+
+- Prompt: 'I heard my wife laughing in the kitchen.'
+Story:  I heard my wife laughing in the kitchen. When she asked me why she was so happy, her voice replied from the kitchen.
+
+- Prompt: 'My daughter won't stop staring at the corner.'
+Story:  My daughter won't stop staring at the corner. I felt a chill when I saw her standing there, smiling wider than before.
+
+- Prompt: [Random]
+Story:  The neighborhood kids dared me to enter the abandoned house. When I stepped inside, they were all staring at me with hollow eyes
+
+**Both model versions are available:**
+- `TSH_Transformer_main.ipynb` - Original 15M parameter model
+- `TSH_Transformer_biggermodel.ipynb` - Scaled 43M parameter model
+
+The subsequent readme pertains to the older model but almost all of it is applicable for the bigger model as well. The only changes are listed above!
+
+---
+
+## Demo (smaller model)
 
 ### Example Generations
 <img src="images/example1.png" alt="Example Generation 1" width="1000" />
@@ -31,16 +72,16 @@ Generate grammatically correct two-sentence horror stories that:
 
 **Challenge:** Training language models from scratch typically requires massive datasets and compute. Small domain-specific datasets often lead to poor grammar, repetitive outputs, or nonsensical text.
 
-## Model Architecture
+## Model Architecture (smaller model)
 
 Custom GPT-style decoder-only transformer built from scratch in PyTorch:
 
 **Core Components:**
-- **Token Embedding:** ~17.4K vocab → 256 dimensions
+- **Token Embedding:** ~17.4K vocab -> 256 dimensions
 - **Positional Embedding:** Learned positions up to 256 tokens
 - **8 Transformer Blocks**, each containing:
   - Multi-Head Self-Attention (8 heads, 32 dim per head)
-  - Feed-Forward Network (256 → 1024 → 256)
+  - Feed-Forward Network (256 -> 1024 -> 256)
   - Layer Normalization
   - Residual connections
   - Dropout (0.15)
@@ -54,7 +95,7 @@ Custom GPT-style decoder-only transformer built from scratch in PyTorch:
 - Layer normalization before attention/FFN (pre-norm stabilizes training)
 - Relatively small model size (enables training from scratch in ~1 hour)
 
-## Training Strategy
+## Training Strategy (smaller model)
 
 ### Phase 1: Pretraining on TinyStories
 
@@ -87,7 +128,7 @@ https://huggingface.co/datasets/sarthakmasta/TwoSentenceHorrorSynthetic
 - **Outcome:** Preserves grammar while learning horror patterns
 - **Note:** The validation loss for fine tuning goes up drastically because the validation is done on a small subset of the fine-tuning horror dataset, and not because the model has forgotten the pretraining.
 
-### Training and Validation Loss Curves
+### Training and Validation Loss Curves (smaller model)
 <img src="images/losscurve.png" alt="Training and Validation Loss" width="800" />
 
 ## Tokenization
@@ -143,7 +184,7 @@ I didn't plan on using TinyStories initially, just used this to train.
 
 
 
-## Unfiltered Actual Sample generations:
+## Unfiltered Actual Sample generations: (smaller model)
 - Prompt: 'I tucked my son into bed.'   
 Story:  I tucked my son into bed. As I turned off the light, he whispered, "Mommy, there's someone under my bed."   
 
@@ -187,7 +228,7 @@ Get your token at: https://huggingface.co/settings/tokens
 
 ### Running Training
 
-1. Open `two_sentence_horror.ipynb` in Google Colab
+1. Open `TSH_Transformer_main.ipynb` in Google Colab
 2. Enable GPU: Runtime -> Change runtime type -> A100
 3. Run cells sequentially
 4. Training takes ~45 minutes on A100
@@ -224,7 +265,6 @@ After training completes, run the proceeding cells to:
 
 ## Future Improvements
 
-- Implement a slightly bigger model with bigger subset of TinyStories in pretraining to get a more creative model
 - Add confidence scores to generation (perplexity-based)
 - Increase the amount of data used for fine-tuning (Generating 50k more samples)
 - Fine-tune on other creative writing domains (sci-fi microfiction, romance flash fiction)
